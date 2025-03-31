@@ -7,18 +7,19 @@ body{
 a{
     color: green;
     text-decoration: none;
+    transition: 1s 2s;
 }
+a:link{
+}
+a:visited{   
+}
+
 a:hover{
     color: red;
     text-decoration: underline;
+    transition: 0.3s;
 }
 a:active{
     color:black;
     opacity: 0.3;
-}
-a:link{
-    color: blue;
-}
-a:visited{
-    color: purple;
 }
