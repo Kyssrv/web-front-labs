@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Комикс</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            position: relative;
+            width: 50%;
+            max-width: 600px;
+        }
+        
+        img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .bubble {
+            position: absolute;
+            padding: 15px;
+            border-radius: 50%; /* Закруглить края */
+            border: 2px solid black;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Тень */
+        }
+        
+        .bubble:nth-child(1) { left: 70%; top: 20%;}
+        .bubble:nth-child(2) { left: 50%; top: 40%;}
+        .bubble:nth-child(3) { left: 30%; top: 60%;}
+        .bubble:nth-child(4) { left: 10%; top: 80%;}
+        
+        .bubble:nth-child(4)::after {
+            content: 'Привет!';
+            color: red;
+            font-weight: bold;
+        }
+        
+        .container:hover .bubble {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .container:hover .bubble:nth-child(1) { animation-delay: 0.1s; }
+        .container:hover .bubble:nth-child(2) { animation-delay: 0.2s; }
+        .container:hover .bubble:nth-child(3) { animation-delay: 0.3s; }
+        .container:hover .bubble:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Картинка с персонажем -->
+    <img src="hero.png" alt="Герой комикса">
+    
+    <!-- Облачки -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+</div>
+</body>
+</html>
