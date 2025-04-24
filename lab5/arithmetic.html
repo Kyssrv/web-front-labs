@@ -44,6 +44,91 @@
             let greeting = 'Приветствую вас на моей странице!\n"Каждый день - это новый шанс изменить твою жизнь".';
             alert(greeting);
         }
+        
+        function showDiv() {
+            let inputA = document.getElementById('numberA');
+            let inputB = document.getElementById('numberB');
+
+            let a = parseFloat(inputA.value);
+            let b = parseFloat(inputB.value);
+
+            // Проверка на NaN для первого поля
+            if (isNaN(a)) {
+                alert('Введите числовое значение в первое поле');
+                inputA.style.color = 'red';
+                inputA.style.borderColor = 'red';
+                inputA.focus();
+                return;
+            } else {
+                inputA.style.color = '';
+                inputA.style.borderColor = '';
+            }
+
+            // Проверка на NaN для второго поля
+            if (isNaN(b)) {
+                alert('Введите числовое значение во второе поле');
+                inputB.style.color = 'red';
+                inputB.style.borderColor = 'red';
+                inputB.focus();
+                return;
+            } else {
+                inputB.style.color = '';
+                inputB.style.borderColor = '';
+            }
+
+            // Проверка на деление на ноль
+            if (b === 0) {
+                alert('На ноль делить нельзя');
+                inputB.style.color = 'red';
+                inputB.style.borderColor = 'red';
+                inputB.focus();
+                return;
+            }
+
+            let result = a / b;
+            alert(a + " / " + b + " = " + result);
+        }
+
+        function showPower() {
+            let inputA = document.getElementById('numberA');
+            let inputB = document.getElementById('numberB');
+
+            let a = parseFloat(inputA.value);
+            let b = parseFloat(inputB.value);
+
+            // Проверка на NaN для первого поля
+            if (isNaN(a)) {
+                alert('Введите числовое значение в первое поле');
+                inputA.style.color = 'red';
+                inputA.style.borderColor = 'red';
+                inputA.focus();
+                return;
+            } else {
+                inputA.style.color = '';
+                inputA.style.borderColor = '';
+            }
+
+            // Проверка на NaN для второго поля
+            if (isNaN(b)) {
+                alert('Введите числовое значение во второе поле');
+                inputB.style.color = 'red';
+                inputB.style.borderColor = 'red';
+                inputB.focus();
+                return;
+            } else {
+                inputB.style.color = '';
+                inputB.style.borderColor = '';
+            }
+
+            // Проверка на оба нуля
+            if (a === 0 && b === 0) {
+                alert('Ошибка: оба поля равны нулю. Невозможно выполнить возведение в степень.');
+                return;
+            }
+
+            let result = Math.pow(a, b);
+            alert(a + " в степени " + b + " равно " + result);
+        }     
     </script>
 
     <style>
@@ -92,6 +177,9 @@
         </div>
         <div class="message" onclick="showProduct()">
             Найти произведение
+        </div>
+        <div class="message" onclick="showDiv()">
+            Найти отношение чисел
         </div>
         <div class="message" onclick="showAuthor">
             Кучерова София Владимировна
