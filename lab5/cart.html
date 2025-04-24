@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon-32x32.png">
+    <link rel="icon" href="favicon-48x48.ico">
+    <script>
+        function calculateTotal() {
+            let total = 0;
+            const prices = [100, 200, 300, 400, 500]; // Пример цен товара
+            for (let i = 0; i < prices.length; i++) {
+                let quantity = document.getElementById(`quantity-${i}`).value;
+                total += prices[i] * (quantity ? quantity : 0); // Умножение цены на количество
+            }
+            document.getElementById('total-price').innerText = 'Общая сумма к оплате: ' + total + ' руб.';
+        }
+
+        function clearCart() {
+            for (let i = 0; i < 5; i++) {
+                document.getElementById(`quantity-${i}`).value = '';
+            }
+            document.getElementById('total-price').innerText = '';
+        }
+    </script>
+    <style>
+        header, footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+        }
+        main {
+            padding: 20px;
+            text-align: left;
+        }
+        .product {
+            margin-bottom: 15px;
+        }
+        .product input {
+            width: 50px;
+            margin-left: 10px;
+        }
+        button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Корзина товаров</h1>
+    </header>
+
+    <main>
+        <div class="product">
+            <span>Товар 1 (100 руб.)</span>
+            <input type="number" id="quantity-0" min="0" placeholder="Количество">
+        </div>
+        <div class="product">
+            <span>Товар 2 (200 руб.)</span>
+            <input type="number" id="quantity-1" min="0" placeholder="Количество">
+        </div>
+        <div class="product">
+            <span>Товар 3 (300 руб.)</span>
+            <input type="number" id="quantity-2" min="0" placeholder="Количество">
+        </div>
+        <div class="product">
+            <span>Товар 4 (400 руб.)</span>
+            <input type="number" id="quantity-3" min="0" placeholder="Количество">
+        </div>
+        <div class="product">
+            <span>Товар 5 (500 руб.)</span>
+            <input type="number" id="quantity-4" min="0" placeholder="Количество">
+        </div>
+
+        <button onclick="calculateTotal()">Рассчитать</button>
+        <button onclick="clearCart()">Очистить</button>
+
+        <div id="total-price" style="margin-top: 20px;"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025, Кучерова София Владимировна, ФБИ-33, 2 курс</p>
+    </footer>
+</body>
+</html>
