@@ -15,6 +15,14 @@
             let result = a + b;
             alert('Сумма ' + a+ ' и ' + b + ' равна ' + result);
         }
+        function showAuthor() {
+            let author = 'Автор страницы: \nКучерова София Владимировна';
+            alert(author);
+        }
+        function showGreeting() {
+            let greeting = 'Приветствую вас на моей странице!\n"Каждый день - это новый шанс изменить твою жизнь".';
+            alert(greeting);
+        }
     </script>
 
     <style>
@@ -38,6 +46,13 @@
             background-color: #007bff; /* цвет фона для заголовка */
             color: white; /* цвет текста в заголовке */
         }
+        footer {
+            cursor: pointer; /* указатель при наведении на подвал */
+            text-align: center; /* выравнивание по центру */
+            padding: 10px; /* внутренний отступ */
+            background-color: #f7f7f7; /* светлый фон для подвала */
+            color: #333; /* цвет текста в подвале */
+        }
     </style>
 </head>
 <body>
@@ -49,7 +64,7 @@
         <div class="message" onclick="showSum()">
             Сколько будет 5154+7891?
         </div>
-        <div class="message">
+        <div class="message" onclick="showAuthor">
             Кучерова София Владимировна
         </div>
     </main>
