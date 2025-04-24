@@ -128,6 +128,12 @@
 
             let result = Math.pow(a, b);
             alert(a + " в степени " + b + " равно " + result);
+        }
+        function changeOutput(buttonNum, backColor, textColor) {
+            let output = document.getElementById('output');
+            output.innerHTML = 'Нажата кнопка ' + buttonNum;
+            output.style.backgroundColor = backColor;
+            output.style.color = textColor;
         }     
     </script>
 
@@ -159,6 +165,11 @@
             background-color: #f7f7f7; /* светлый фон для подвала */
             color: #333; /* цвет текста в подвале */
         }
+        #output{
+            border: 1px solid;
+            width: 300px;
+            height: 40px;
+        }
     </style>
 </head>
 <body>
@@ -169,6 +180,15 @@
     <main>
         <label>Первое число: <input type="number" value="5154" id="numberA"></label><br>
         <label>Второе число: <input type="number" value="7891" id="numberB">></label><br>
+        <div>
+            <input type="button" value="Кнопка 1" onclick="changeOutput(1, 'red', 'yellow', 'solid', '5px', '2px')">
+            <input type="button" value="Кнопка 2" onclick="changeOutput(2, 'black', 'lime', 'dashed', '10px', '3px')">
+            <input type="button" value="Кнопка 3" onclick="changeOutput(3, 'blue', 'lightblue', 'dotted', '8px', '4px')">
+            <input type="button" value="Кнопка 4" onclick="changeOutput(4, 'purple', 'lavender', 'double', '6px', '5px')">
+        </div>
+
+        <div id="output"></div>
+
         <div class="message" onclick="showSum()">
             Найти сумму чисел
         </div>
