@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Круги</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon-32x32.png">
+    <link rel="icon" href="favicon-48x48.ico">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        header, footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .circle {
+            width: 100px; /* Размер круга */
+            height: 100px; /* Размер круга */
+            border-radius: 50%; /* Округлые углы */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin: 10px;
+            transition: all 0.5s ease; /* Плавный переход для размера и прозрачности */
+        }
+        #resetButton {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function hideCircle(event) {
+            const circle = event.target;
+            circle.style.width = '0';
+            circle.style.height = '0';
+            circle.style.opacity = '0';
+        }
+
+        function resetCircles() {
+            const circles = document.querySelectorAll('.circle');
+            for (let i = 0; i < circles.length; i++) {
+                circles[i].style.width = '100px';
+                circles[i].style.height = '100px';
+                circles[i].style.opacity = '1';
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Круги</h1>
+    </header>
+
+    <main>
+        <div class="circle" style="background-color: #FF5733;" onclick="hideCircle(event)">1</div>
+        <div class="circle" style="background-color: #33FF57;" onclick="hideCircle(event)">2</div>
+        <div class="circle" style="background-color: #3357FF;" onclick="hideCircle(event)">3</div>
+        <div class="circle" style="background-color: #F1C40F;" onclick="hideCircle(event)">4</div>
+        <div class="circle" style="background-color: #8E44AD;" onclick="hideCircle(event)">5</div>
+        <div class="circle" style="background-color: #E67E22;" onclick="hideCircle(event)">6</div>
+        <div class="circle" style="background-color: #16A085;" onclick="hideCircle(event)">7</div>
+        <div class="circle" style="background-color: #2980B9;" onclick="hideCircle(event)">8</div>
+        <div class="circle" style="background-color: #D35400;" onclick="hideCircle(event)">9</div>
+        <div class="circle" style="background-color: #2C3E50;" onclick="hideCircle(event)">10</div>
+    </main>
+
+    <button id="resetButton" onclick="resetCircles()">Возвратить все круги</button>
+
+    <footer>
+        <p>&copy; 2025, Кучерова София Владимировна, ФБИ-33, 2 курс</p>
+    </footer>
+</body>
+</html>
