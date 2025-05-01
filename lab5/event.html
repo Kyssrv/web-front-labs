@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="favicon.ico">
+    <title>События и Объект Event</title>
+    <style>
+        #eventBox {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #000;
+            background-color: #e0e0e0;
+            cursor: crosshair;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, border 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <h1>Демонстрация события мыши</h1>
+    <div id="eventBox" onmousemove="showCoords.call(this, event)">
+        Двигайте мышь здесь
+    </div>
+
+    <script>
+        function showCoords(event) {
+            // Получение координат
+            let x = event.clientX;
+            let y = event.clientY;
+
+            // Проверка нажатых клавиш
+            let ctrlPressed = event.ctrlKey;
+            let altPressed = event.altKey;
+            let shiftPressed = event.shiftKey;
+
+            // Предполагаем, что текст будет заменён
+            let output = `Координаты: ${x}, ${y}<br>`;
+            if (ctrlPressed) {
+                output += "Нажата клавиша Ctrl<br>";
+                // Изменение цвета текста
+                this.style.color = 'red';
+            } else {
+                this.style.color = 'black';
+            }
+            
+            if (altPressed) {
+                output += "Нажата клавиша Alt<br>";
+                this.style.backgroundColor = '#FFD700'; // Золотой цвет
+            }
+            
+            if (shiftPressed) {
+                output += "Нажата клавиша Shift<br>";
+                this.style.border = '2px dashed #ff0000'; // Красная пунктирная рамка
+            } else {
+                this.style.border = '2px solid #000'; // Вернуть к обычной рамке
+                this.style.backgroundColor = '#e0e0e0'; // Вернуть к обычному фону
+            }
+            
+            // Вывод координат и состояния клавиш в блок
+            this.innerHTML = output + "Двигайте мышь здесь";
+        }
+    </script>
+</body>
+</html>
