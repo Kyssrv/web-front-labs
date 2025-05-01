@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="favicon.ico">
+    <title>Фильтры</title>
+</head>
+<body>
+    <header>
+        <h1>Фильтры для изображений</h1>
+    </header>
+    
+    <main>
+        <h2>Применение фильтров к изображению</h2>
+        <div>
+            <label for="blurValue">Размытие (blur): </label>
+            <input type="range" id="blurValue" min="0" max="20" value="0" onchange="applyBlur()">
+            <span id="blurValueOutput">0px</span>
+        </div>
+        
+        <div id="imageContainer">
+            <img id="image" src="lab5/sea-mountain.webp" alt="Sea Mountain" style="width: 100%; max-width: 600px;">
+        </div>
+        <div>
+            <label for="brightnessValue">Яркость (brightness): </label>
+            <input type="range" id="brightnessValue" min="0" max="500" value="100" onchange="applyBrightness()">
+            <span id="brightnessValueOutput">100%</span>
+        </div>
+        
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Ваше Имя</p>
+    </footer>
+
+    <script>
+        function applyBlur() {
+            const blurValue = document.getElementById('blurValue').value;
+            const image = document.getElementById('image');
+            const blurValueOutput = document.getElementById('blurValueOutput');
+            
+            image.style.filter = `blur(${blurValue}px)`;
+            blurValueOutput.textContent = `${blurValue}px`;
+        }
+        function applyBrightness() {
+            const brightnessValue = document.getElementById('brightnessValue').value;
+            const image = document.getElementById('image');
+            const brightnessValueOutput = document.getElementById('brightnessValueOutput');
+            
+            image.style.filter = `brightness(${brightnessValue}%)`;
+            brightnessValueOutput.textContent = `${brightnessValue}%`;
+        }
+
+    </script>
+</body>
+</html>
