@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="favicon.ico">
+    <title>Интерактивные Фильтры</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+        
+        #image {
+            width: 600px;
+            transition: filter 0.3s;
+            border: 2px solid #ccc;
+            margin: 20px 0;
+        }
+
+        #filterInfo {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #help {
+            margin: 20px;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Интерактивные Фильтры</h1>
+    <div id="help">
+        <p>Наведите курсор на изображение. Чем дальше от левого края, тем сильнее эффект.</p>
+        <p>Нажмите Ctrl, Alt или Shift для применения дополнительных фильтров.</p>
+    </div>
+    <img id="image" src="lab5/sea-mountain.webp" alt="Sea Mountain" onmousemove="applyFilter(event)" onmouseleave="resetFilter()">
+    <div id="filterInfo"></div>
+
+    <script>
+        const image = document.getElementById('image');
+        const filterInfo = document.getElementById('filterInfo');
+
+        function applyFilter(event) {
+            const rect = image.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left; // Координата X мыши
+            const percent = Math.min(Math.max(mouseX / rect.width, 0), 1); // Значение от 0 до 1
+
+            // Применение фильтра в зависимости от нажатых клавиш
+            let filter = '';
+            let filterStrength = '';
+
+            if (event.ctrlKey) {
+                filter = `brightness(${(percent * 400) + 100}%)`;
+                filterStrength = `Яркость: ${Math.round((percent * 400) + 100)}%`;
+            } else if (event.altKey) {
+                filter = `sepia(${Math.round(percent * 100)}%)`;
+                filterStrength = `Сепия: ${Math.round(percent * 100)}%`;
+            } else if (event.shiftKey) {
+                filter = `hue-rotate(${Math.round(percent * 360)}deg)`;
+                filterStrength = `Оттенок: ${Math.round(percent * 360)}°`;
+            } else {
+                filter = `blur(${Math.round(percent * 20)}px)`;
+                filterStrength = `Размытие: ${Math.round(percent * 20)}px`;
+            }
+            
+            // Применяем фильтр к изображению
+            image.style.filter = filter;
+
+            // Обновляем информацию о фильтре
+            filterInfo.textContent = `${filter} (${filterStrength})`;
+        }
+
+        function resetFilter() {
+            // Сбрасываем фильтр и информацию
+            image.style.filter = 'none';
+            filterInfo.textContent = '';
+        }
+    </script>
+</body>
+</html>
