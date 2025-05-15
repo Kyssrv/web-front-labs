@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../main.css"> <!-- Путь к файлу стилей -->
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon-32x32.png">
+    <link rel="icon" href="../favicon-48x48.ico">
+    <title>Диаграмма</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        header, footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+        }
+        main {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #diag {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Выравнивание по нижнему краю */
+            height: 300px; /* Высота диаграммы */
+            margin-top: 20px;
+        }
+        .bar {
+            width: 30px; /* Ширина столбцов */
+            margin: 0 5px; /* Отступ между столбцами */
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Выравнивание по нижнему краю */
+            position: relative; /* Для абсолютного позиционирования текста */
+        }
+        .value {
+            position: absolute;
+            bottom: 100%; /* Ставим текст выше столбца */
+            text-align: center;
+            margin-bottom: 5px; /* Отступ между текстом и столбцом */
+        }
+    </style>
+    <script>
+        function showDiagram() {
+            let data = [36, 86, 55, 28, 92, 60, 41, 17, 9, 43];
+            let colors = ['red', 'green', '#00ff33', 'blue', 'orange', 'purple', 'cyan', 'magenta', 'yellow', 'pink'];
+            let diag = document.getElementById('diag');
+
+            for (let i = 0; i < data.length; i++) {
+                let bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = data[i] + 'px'; // Устанавливаем высоту в соответствии с данными
+                bar.style.backgroundColor = colors[i]; // Устанавливаем цвет
+
+                // Создаем элемент для отображения значения
+                let value = document.createElement('div');
+                value.className = 'value';
+                value.innerText = data[i]; // Устанавливаем текст значения
+                bar.appendChild(value); // Добавляем значение в столбец
+
+                diag.appendChild(bar); // Добавляем столбец в диаграмму
+            }
+        }
+
+        window.onload = showDiagram; // Вызываем функцию при загрузке страницы
+    </script>
+
+</head>
+<body>
+    <header>
+        <h1>Столбчатая диаграмма</h1>
+    </header>
+
+    <main>
+        <div id="diag">
+            <!-- Столбцы будут добавлены динамически через JavaScript -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Кучерова София ФБИ-33</p>
+    </footer>
+</body>
+</html>
+    

@@ -34,58 +34,9 @@
             margin-top: 20px;
             text-align: center;
         }
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 80%;
-        }
-        table, th, td {
-            border: 1px solid #007BFF;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-        input[type="number"] {
-            padding: 5px;
-            margin: 5px;
-        }
-        button {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
     </style>
-    <script>
-        function showMutipleTable() {
-            const multiplier = document.getElementById('multiplier').value;
-            const start = parseInt(document.getElementById('start').value);
-            const end = parseInt(document.getElementById('end').value);
-            const tbl = document.getElementById('mtable');
-            
-            // Проверка на корректность введенных данных
-            if (start > end) {
-                alert("Ошибка: 'Начать с' должно быть меньше или равно 'Закончить на'.");
-                return;
-            }
-
-            // Генерация таблицы умножения
-            tbl.innerHTML = <h1>Таблица умножения на ${multiplier}</h1>;
-            let tableContent = '<table><tr><th>Число</th><th>Результат</th></tr>';
-            for (let i = start; i <= end; i++) {
-                tableContent += <tr><td>${i}</td><td>${i * multiplier}</td></tr>;
-            }
-            tableContent += '</table>';
-            tbl.innerHTML += tableContent;
-        }
-    </script>
 </head>
-<body onload="showMutipleTable()">
+<body>
     <header>
         <h1>Лабораторная работа 6</h1>
     </header>
@@ -93,24 +44,13 @@
     <nav>
         <ul>
             <li><a href="../index.html">На главную</a></li>
+            <li><a href="diagram.html">Диаграмма</a></li> <!-- Добавленная ссылка на diagram.html -->
         </ul>
     </nav>
 
     <main>
         <div id="mtable"></div>
-
-        <div>
-            <label for="multiplier">Умножить на:</label>
-            <input type="number" id="multiplier" value="7" min="1">
-            
-            <label for="start">Начать с:</label>
-            <input type="number" id="start" value="1" min="1">
-            
-            <label for="end">Закончить на:</label>
-            <input type="number" id="end" value="10" min="1">
-            
-            <button onclick="showMutipleTable()">Таблица</button>
-        </div>
+        <!-- Здесь можно добавить другие элементы, если нужно -->
     </main>
 
     <footer>
