@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Температурная диаграмма</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .chart {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .bar {
+            width: 20px;
+            background-color: #007BFF;
+            transition: background-color 0.3s;
+        }
+        .highlight {
+            background-color: #FF4500; /* Цвет выделенного столбика */
+        }
+        input {
+            margin-top: 20px;
+            padding: 5px;
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Температурная диаграмма за месяц</h1>
+    <div class="chart" id="chart"></div>
+    <input type="number" id="day-input" min="1" max="30" placeholder="День (1-30)">
+    <div id="temperature-output"></div>
+
+    <script>
+        const days = 30;
+        const minTemperatures = [];
+        const maxTemperatures = [];
+        
+        // Генерация случайных температур
+        for (let i = 0; i < days; i++) {
+            minTemperatures[i] = Math.floor(Math.random() * 15); // Минимальная температура от 0 до 15
+            maxTemperatures[i] = Math.floor(Math.random() * (30 - minTemperatures[i]) + minTemperatures[i]); // Максимальная температура больше минимальной
+        }
+
+        // Отображение диаграммы
+        function drawChart() {
+            const chart = document.getElementById('chart');
+            chart.innerHTML = ''; // Очистка предыдущего содержимого
+
+            for (let i = 0; i < days; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = ${maxTemperatures[i]}px; // Высота столбика по максимальной температуре
+                bar.dataset.day = i + 1; // Сохранение номера дня в data-атрибуте
+                chart.appendChild(bar);
+            }
+        }
+
+        drawChart();
+
+        // Обработчик ввода номера дня
+        document.getElementById('day-input').addEventListener('input', function() {
+            const day = parseInt(this.value) - 1; // Получаем номер дня (0-29)
+            const bars = document.querySelectorAll('.bar');
+
+            bars.forEach((bar, index) => {
+                bar.classList.remove('highlight'); // Снимаем выделение со всех столбиков
+                if (index === day) {
+                    bar.classList.add('highlight'); // Выделяем текущий столбик
+                    document.getElementById('temperature-output').innerText = 
+                        Минимальная температура: ${minTemperatures[day]}°C, Максимальная температура: ${maxTemperatures[day]}°C;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
