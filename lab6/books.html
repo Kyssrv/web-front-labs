@@ -60,6 +60,8 @@
         <div class="button-container">
             <button id="start-button">Старт</button>
             <button id="stop-button" disabled>Стоп</button>
+            <button id="update-time-button">Обновлять время</button>
+            <button id="stop-update-button" disabled>Остановить обновление времени</button>
         </div>
     </main>
 
@@ -68,7 +70,8 @@
     </footer>
 
     <script>
-        let colorInterval;
+        let colorInterval; // Глобальная переменная для интервала изменения цвета
+        let timeInterval; // Глобальная переменная для интервала обновления времени
 
         function showBooks() {
             // Здесь должен быть ваш код для отображения книг
@@ -105,8 +108,7 @@
             colorInterval = setInterval(() => {
                 header.style.color = colors[index];
                 index = (index + 1) % colors.length; // Циклический переход по цветам
-            }, 1000);
-
+            }, 1000); // Период смены цвета
             document.getElementById('start-button').disabled = true; // Блокируем кнопку Старт
             document.getElementById('stop-button').disabled = false; // Разблокируем кнопку Стоп
         }
@@ -118,12 +120,26 @@
             document.getElementById('stop-button').disabled = true; // Блокируем кнопку Стоп
         }
 
-        // Вызов функции для отображения даты и времени
+        function startTimeUpdate() {
+            timeInterval = setInterval(showDate, 1000); // Обновление времени каждую секунду
+            document.getElementById('update-time-button').disabled = true; // Блокируем кнопку обновления времени
+            document.getElementById('stop-update-button').disabled = false; // Разблокируем кнопку остановки обновления времени
+        }
+
+        function stopTimeUpdate() {
+            clearInterval(timeInterval);
+            document.getElementById('update-time-button').disabled = false; // Разблокируем кнопку обновления времени
+            document.getElementById('stop-update-button').disabled = true; // Блокируем кнопку остановки обновления времени
+        }
+
+        // Вызов функции для отображения даты и времени при загрузке страницы
         showDate();
 
         // Добавляем обработчики событий на кнопки
         document.getElementById('start-button').addEventListener('click', startColorChange);
         document.getElementById('stop-button').addEventListener('click', stopColorChange);
+        document.getElementById('update-time-button').addEventListener('click', startTimeUpdate);
+        document.getElementById('stop-update-button').addEventListener('click', stopTimeUpdate);
     </script>
 </body>
 </html>
