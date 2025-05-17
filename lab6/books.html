@@ -3,49 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../main.css"> <!-- Путь к файлу стилей -->
-    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-    <link rel="icon" href="../favicon-32x32.png">
-    <link rel="icon" href="../favicon-48x48.ico">
-    <script src="books.js"></script>
-    <script>
-        const books = [
-            { author: "Лев Толстой", name: "Война и мир", publicationYear: 1869, price: 500, bestseller: true, inStock: true },
-            { author: "Фёдор Достоевский", name: "Преступление и наказание", publicationYear: 1866, price: 400, bestseller: true, inStock: false },
-            { author: "Александр Пушкин", name: "Евгений Онегин", publicationYear: 1833, price: 300, bestseller: false, inStock: true },
-            { author: "Михаил Булгаков", name: "Мастер и Маргарита", publicationYear: 1966, price: 450, bestseller: true, inStock: true },
-            { author: "Антон Чехов", name: "Вишнёвый сад", publicationYear: 1904, price: 350, bestseller: false, inStock: false },
-            { author: "Иван Тургенев", name: "Отцы и дети", publicationYear: 1862, price: 400, bestseller: false, inStock: true },
-            { author: "Даниил Гранин", name: "Зубр", publicationYear: 1970, price: 600, bestseller: true, inStock: true },
-            { author: "Сергей Довлатов", name: "Заповедник", publicationYear: 1983, price: 250, bestseller: false, inStock: true },
-            { author: "Василий Шукшин", name: "Сельские жители", publicationYear: 1975, price: 300, bestseller: false, inStock: false },
-            { author: "Анатолий Рыбаков", name: "Тяжёлый песок", publicationYear: 1976, price: 500, bestseller: true, inStock: true }
-        ];
-
-        function showBooks() {
-            const bookList = document.getElementById('book-list');
-            for (let i = 0; i < books.length; i++) {
-                const book = books[i];
-                let bookClass = '';
-                let stockMessage = '';
-
-                if (!book.inStock) {
-                    bookClass = 'out-of-stock';
-                    stockMessage = ' (временно отсутствует)';
-                }
-
-                bookList.innerHTML += 
-                    <div class="book ${book.bestseller ? 'bestseller' : ''} ${bookClass}">
-                        <b>${book.author}.</b>
-                        <i>${book.name}</i>
-                        &mdash; ${book.publicationYear} 
-                        <span class="price">Цена: ${book.price} руб.</span>
-                        <span class="stock">${stockMessage}</span>
-                    </div>
-                ;
-            }
-        }
-    </script>
     <title>Список книг</title>
     <style>
         body {
@@ -55,40 +12,39 @@
             margin: 0;
             padding: 20px;
         }
-        header, footer {
+        header {
             text-align: center;
             padding: 10px;
             background-color: #007BFF;
             color: white;
+            transition: color 0.5s; /* Плавный переход цвета */
         }
         main {
             margin-top: 20px;
             text-align: center;
         }
-        .book-list {
-            margin-top: 20px;
-            text-align: left; /* Выравнивание текста влево */
-            max-width: 600px; /* Максимальная ширина списка */
-            margin-left: auto; /* Центрирование списка */
-            margin-right: auto; /* Центрирование списка */
-        }
-        .book {
+        .date-output {
+            font-size: 18px; /* Размер шрифта для дат */
+            margin: 10px 0; /* Отступы сверху и снизу */
             padding: 10px;
-            border-bottom: 1px solid #ccc;
+            background-color: #e7f1ff; /* Светлый фон для вывода дат */
+            border-radius: 5px; /* Закругленные углы */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для выделения */
         }
-        .bestseller {
-            background-color: #FFD700; /* Золотистый цвет для бестселлеров */
-            border-left: 5px solid #FF4500; /* Красная рамка слева */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
         }
-        .out-of-stock {
-            color: #888; /* Тусклый цвет для отсутствующих книг */
+        .button-container {
+            margin-top: 20px; /* Отступ сверху для кнопок */
         }
-        .price {
-            font-weight: bold;
-        }
-        .stock {
-            font-style: italic;
-            color: #FF4500; /* Красный цвет для сообщения о наличии */
+        button {
+            padding: 10px 15px; /* Отступы внутри кнопок */
+            font-size: 16px; /* Размер шрифта для кнопок */
+            margin: 5px; /* Отступы между кнопками */
+            cursor: pointer; /* Указатель при наведении */
         }
     </style>
 </head>
@@ -98,14 +54,76 @@
     </header>
 
     <main>
-        <h2>Список книг</h2>
-        <div id="book-list" class="book-list">
-            <!-- Здесь будет выводиться список книг -->
+        <div id="current-date"></div>
+        <div id="locale-dates" class="date-output"></div>
+        
+        <div class="button-container">
+            <button id="start-button">Старт</button>
+            <button id="stop-button" disabled>Стоп</button>
         </div>
     </main>
 
     <footer>
         <p>&copy; 2025 Кучерова София ФБИ-33</p>
     </footer>
+
+    <script>
+        let colorInterval;
+
+        function showBooks() {
+            // Здесь должен быть ваш код для отображения книг
+        }
+
+        function showDate() {
+            const locales = [
+                { locale: 'ru-RU', country: 'Россия' },
+                { locale: 'en-US', country: 'США' },
+                { locale: 'fr-FR', country: 'Франция' },
+                { locale: 'de-DE', country: 'Германия' },
+                { locale: 'ja-JP', country: 'Япония' }
+            ];
+
+            const now = new Date();
+            let output = '';
+
+            locales.forEach(({ locale, country }) => {
+                const formattedDate = new Intl.DateTimeFormat(locale, {
+                    dateStyle: 'full',
+                    timeStyle: 'long'
+                }).format(now);
+                output += <p>${country}: ${formattedDate}</p>;
+            });
+
+            document.getElementById('locale-dates').innerHTML = output;
+        }
+
+        function startColorChange() {
+            const header = document.querySelector('header');
+            const colors = ['#007BFF', '#FF4500', '#32CD32', '#FFD700', '#FF69B4'];
+            let index = 0;
+
+            colorInterval = setInterval(() => {
+                header.style.color = colors[index];
+                index = (index + 1) % colors.length; // Циклический переход по цветам
+            }, 1000);
+
+            document.getElementById('start-button').disabled = true; // Блокируем кнопку Старт
+            document.getElementById('stop-button').disabled = false; // Разблокируем кнопку Стоп
+        }
+
+        function stopColorChange() {
+            clearInterval(colorInterval);
+            document.querySelector('header').style.color = 'white'; // Возвращаем цвет по умолчанию
+            document.getElementById('start-button').disabled = false; // Разблокируем кнопку Старт
+            document.getElementById('stop-button').disabled = true; // Блокируем кнопку Стоп
+        }
+
+        // Вызов функции для отображения даты и времени
+        showDate();
+
+        // Добавляем обработчики событий на кнопки
+        document.getElementById('start-button').addEventListener('click', startColorChange);
+        document.getElementById('stop-button').addEventListener('click', stopColorChange);
+    </script>
 </body>
 </html>
