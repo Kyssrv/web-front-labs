@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Котировки акций Россети Московский регион</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .positive {
+            color: green;
+        }
+        .negative {
+            color: red;
+        }
+        .stats {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Котировки акций компании Россети Московский регион (MOESK)</h1>
+    
+    <button onclick="showStockData()">Показать курс акций MOESK</button>
+    
+    <div id="stockTable"></div>
+    <div id="stats" class="stats"></div>
+
+    <script>
+        // Данные по обыкновенным акциям MOESK (последние 10 торговых дней)
+        const dates = [
+            '2023-11-01', '2023-11-02', '2023-11-03', '2023-11-06', 
+            '2023-11-07', '2023-11-08', '2023-11-09', '2023-11-10', 
+            '2023-11-13', '2023-11-14'
+        ];
+        
+        const prices = [
+            0.68, 0.67, 0.69, 0.70, 
+            0.71, 0.70, 0.69, 0.68, 
+            0.67, 0.68
+        ];
+        
+        function showStockData() {
+            let tableHTML = `
+                <table>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Цена акций (руб)</th>
+                        <th>Изменение</th>
+                    </tr>
+            `;
+            
+            for (let i = 0; i < dates.length; i++) {
+                let difference = '';
+                let diffClass = '';
+                
+                if (i > 0) {
+                    const diff = prices[i] - prices[i-1];
+                    difference = diff.toFixed(2);
+                    
+                    if (diff > 0) {
+                        diffClass = 'positive';
+                        difference = '+' + difference; // Добавляем "+" для роста
+                    } else if (diff < 0) {
+                        diffClass = 'negative';
+                    } else {
+                        difference = '0.00'; // Показываем ноль
+                    }
+                }
+                
+                tableHTML += `
+                    <tr>
+                        <td>${dates[i]}</td>
+                        <td>${prices[i].toFixed(2)}</td>
+                        <td class="${diffClass}">${difference}</td>
+                    </tr>
+                `;
+            }
+            
+            tableHTML += </table>;
+            
+            // Рассчитываем статистику
+            const sum = prices.reduce((a, b) => a + b, 0);
+            const average = sum / prices.length;
+            const max = Math.max(...prices);
+            const min = Math.min(...prices);
+            
+            const statsHTML = `
+                <h3>Статистика за период:</h3>
+                <p>Средняя цена: <strong>${average.toFixed(2)} руб.</strong></p>
+                <p>Максимальная цена: <strong>${max.toFixed(2)} руб.</strong></p>
+                <p>Минимальная цена: <strong>${min.toFixed(2)} руб.</strong></p>
+            `;
+            
+            document.getElementById('stockTable').innerHTML = tableHTML;
+            document.getElementById('stats').innerHTML = statsHTML;
+        }
+    </script>
+</body>
+</html>
