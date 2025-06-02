@@ -6,6 +6,7 @@
     <title>Лабораторная работа 8</title>
     <link rel="stylesheet" href="main.css">
     <link rel="shortcut icon" href="path/to/favicon.ico" type="image/x-icon">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
     <header>
@@ -19,10 +20,24 @@
         </nav>
     </header>
     <main>
-        <!-- Основное содержимое страницы -->
+        <div id="app">
+            <h1 :title="messageRus">{{message}}</h1>
+        </div>
     </main>
     <footer>
         <p>&copy; 2025 Кучерова София</p>
     </footer>
+    <script>
+        Vue.createApp({
+            data(){
+                return {
+                    message: 'Hello!',
+                    messageRus: 'Привет!',
+                }
+            },
+
+        }).mount('#app');
+    </script>
+
 </body>
 </html>
