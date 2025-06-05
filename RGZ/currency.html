@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс валют - Выборгский судостроительный завод</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Курс валют</h1>
+    </header>
+
+    <main>
+        <section class="currency-section">
+            <h2>Калькулятор валют</h2>
+            
+            <div class="converter-container">
+                <div class="converter-box">
+                    <label for="rub-amount">Рубли (RUB)</label>
+                    <input type="number" id="rub-amount" placeholder="Введите сумму">
+                    <button onclick="convert('rub-to-rsd')">→</button>
+                </div>
+                
+                <div class="converter-box">
+                    <label for="rsd-amount">Сербские динары (RSD)</label>
+                    <input type="number" id="rsd-amount" placeholder="Введите сумму">
+                    <button onclick="convert('rsd-to-rub')">→</button>
+                </div>
+            </div>
+            
+            <div class="exchange-rate-info">
+                <p>Текущий курс: 1 RSD = <span id="current-rate">...</span> RUB</p>
+                <p>Дата обновления: <span id="update-date">...</span></p>
+            </div>
+        </section>
+
+        <section class="chart-section">
+            <h2>Динамика курса сербского динара (RSD)</h2>
+            <div class="chart-container">
+                <canvas id="currency-chart"></canvas>
+            </div>
+            <div class="chart-info" id="chart-info"></div>
+        </section>
+    </main>
+
+    <!-- Фиксированное меню внизу -->
+    <div class="bottom-menu">
+        <a href="index.html" title="О компании"><i class="icon">🏢</i></a>
+        <a href="news.html" title="Новости"><i class="icon">📰</i></a>
+        <a href="currency.html" title="Курс валют"><i class="icon">💱</i></a>
+        <a href="contacts.html" title="Контакты"><i class="icon">📞</i></a>
+        <a href="video.html" title="Видео"><i class="icon">🎥</i></a>
+    </div>
+
+    <script src="js/currency.js"></script>
+</body>
+</html>
