@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогноз и фактические данные погоды</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .current-data {
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .data-item {
+            text-align: center;
+            margin: 10px;
+        }
+        .data-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .data-label {
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 40px;
+        }
+        .api-link {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Прогноз и фактические данные погоды</h1>
+    </div>
+
+    <div class="current-data" id="currentWeather">
+        <div class="data-item">
+            <div class="data-value" id="currentTemp">--°C</div>
+            <div class="data-label">Текущая температура</div>
+        </div>
+        <div class="data-item">
+            <div class="data-value" id="currentHumidity">--%</div>
+            <div class="data-label">Влажность</div>
+        </div>
+        <div class="data-item">
+            <div class="data-value" id="currentPressure">-- hPa</div>
+            <div class="data-label">Давление</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="showChart('temperature')">Температура</div>
+        <div class="tab" onclick="showChart('humidity')">Влажность</div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="weatherChart"></canvas>
+    </div>
+
+    <div class="api-link">
+        Данные предоставлены: <a href="https://open-meteo.com/" target="_blank">Open-Meteo Weather API</a>
+    </div>
+
+    <script>
+        // Координаты Москвы
+        const latitude = 55.7558;
+        const longitude = 37.6173;
+        
+        let weatherChart;
+        let forecastData = {};
+        let hourlyData = {};
+        
+        // Показать выбранный график
+        function showChart(type) {
+            updateChart(type);
+            
+            // Обновляем активную вкладку
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // Инициализация при загрузке страницы
+        window.onload = function() {
+            fetchWeatherData();
+        };
+        
+        // Запрос данных с open-meteo.com
+        async function fetchWeatherData() {
+            try {
+                // Запрос прогноза на 1 день
+                const forecastResponse = await fetch(
+                    https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m&forecast_days=1
+                );
+                forecastData = await forecastResponse.json();
+                
+                // Запрос фактических данных за прошедшие 24 часа
+                const now = new Date();
+                const pastDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                
+                const hourlyResponse = await fetch(
+                    https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,pressure_msl&start_date=${formatDate(pastDate)}&end_date=${formatDate(now)}
+                );
+                hourlyData = await hourlyResponse.json();
+                
+                // Обновляем текущие данные
+                updateCurrentWeather();
+                
+                // Строим график температуры по умолчанию
+                updateChart('temperature');
+                
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error);
+                alert('Не удалось получить данные о погоде. Пожалуйста, попробуйте позже.');
+            }
+        }
+        
+        // Форматирование даты для API
+        function formatDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+        
+        // Обновление текущих данных
+        function updateCurrentWeather() {
+            if (hourlyData.hourly && hourlyData.hourly.time.length > 0) {
+                const lastIndex = hourlyData.hourly.time.length - 1;
+                
+                document.getElementById('currentTemp').textContent = 
+                    ${hourlyData.hourly.temperature_2m[lastIndex]}°C;
+                document.getElementById('currentHumidity').textContent = 
+                    ${hourlyData.hourly.relativehumidity_2m[lastIndex]}%;
+                document.getElementById('currentPressure').textContent = 
+                    ${hourlyData.hourly.pressure_msl[lastIndex]} hPa;
+            }
+        }
+        
+        // Обновление графика
+        function updateChart(type) {
+            const ctx = document.getElementById('weatherChart').getContext('2d');
+            
+            // Подготавливаем данные для графика
+            const labels = [];
+            const forecastValues = [];
+            const actualValues = [];
+            
+            // Для прогноза берем данные с интервалом в 3 часа
+            for (let i = 0; i < forecastData.hourly.time.length; i += 3) {
+                const time = forecastData.hourly.time[i].split('T')[1].substring(0, 5);
+                labels.push(time);
+                
+                if (type === 'temperature') {
+                    forecastValues.push(forecastData.hourly.temperature_2m[i]);
+                } else {
+                    forecastValues.push(forecastData.hourly.relativehumidity_2m[i]);
+                }
+            }
+            
+            // Для фактических данных берем последние 8 значений с интервалом в 3 часа
+            const hourlyLength = hourlyData.hourly.time.length;
+            for (let i = Math.max(0, hourlyLength - 8); i < hourlyLength; i += 1) {
+                const time = hourlyData.hourly.time[i].split('T')[1].substring(0, 5);
+                
+                if (type === 'temperature') {
+                    actualValues.push(hourlyData.hourly.temperature_2m[i]);
+                } else {
+                    actualValues.push(hourlyData.hourly.relativehumidity_2m[i]);
+                }
+            }
+            
+            // Если график уже существует, обновляем его
+            if (weatherChart) {
+                weatherChart.data.labels = labels;
+                weatherChart.data.datasets[0].data = forecastValues;
+                weatherChart.data.datasets[1].data = actualValues;
+                weatherChart.data.datasets[0].label = Прогноз ${type === 'temperature' ? 'температуры' : 'влажности'};
+                weatherChart.data.datasets[1].label = Фактическая ${type === 'temperature' ? 'температура' : 'влажность'};
+                weatherChart.update();
+                return;
+            }
+            
+            // Создаем новый график
+            weatherChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: Прогноз ${type === 'temperature' ? 'температуры' : 'влажности'},
+                            data: forecastValues,
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: Фактическая ${type === 'temperature' ? 'температура' : 'влажность'},
+                            data: actualValues,
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: type === 'temperature' ? 'Температура (°C)' : 'Влажность (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Время'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: type === 'temperature' ? 
+                                'Сравнение прогноза и фактической температуры' : 
+                                'Сравнение прогноза и фактической влажности',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ${context.dataset.label}: ${context.raw}${type === 'temperature' ? '°C' : '%'};
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

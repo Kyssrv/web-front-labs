@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление блоков</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        header, footer {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .block {
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+    <script>
+        function addNewBlock() {
+            const newBlock = document.createElement('div');
+            newBlock.className = 'block';
+            newBlock.textContent = 'Новый блок ' + (document.querySelectorAll('.block').length + 1);
+            
+            document.querySelector('main').appendChild(newBlock);
+        }
+    </script>
+</head>
+<body>
+    <header>
+        НГТУ, ФБ, Лабораторная работа 7
+    </header>
+
+    <main>
+        <button onclick="addNewBlock()">Добавить блок</button>
+    </main>
+
+    <footer>
+        &copy; Кучерова София, ФБИ-33, 2 курс, 2024
+    </footer>
+</body>
+</html>
