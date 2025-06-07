@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Курс евро</title>
+    <title>Курс евро и погода</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        .exchange-rate-card {
+        .exchange-rate-card, .weather-card {
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
@@ -17,19 +17,19 @@
             background-color: #f9f9f9;
         }
         
-        .rate-value {
+        .rate-value, .weather-value {
             font-size: 24px;
             font-weight: bold;
             margin: 10px 0;
             color: #2c3e50;
         }
         
-        .rate-date {
+        .rate-date, .weather-date {
             color: #7f8c8d;
             font-style: italic;
         }
         
-        .rate-difference {
+        .rate-difference, .weather-times {
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px dashed #ddd;
@@ -52,6 +52,7 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
+            margin-right: 10px;
         }
         
         button:hover {
@@ -63,27 +64,44 @@
             font-size: 14px;
             color: #7f8c8d;
         }
+        
+        .weather-time {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Курс евро к рублю</h1>
+        <h1>Курс евро и погода</h1>
     </header>
     
     <main>
-        <button onclick="getEuroExchangeRate()">Получить курс евро</button>
+        <div>
+            <button onclick="getEuroExchangeRate()">Получить курс евро</button>
+            <button onclick="getWeather()">Получить погоду</button>
+        </div>
+        
         <div id="exchangeRateResult"></div>
+        <div id="weatherResult"></div>
         
         <div class="api-link">
-            Данные предоставлены: <a href="https://www.cbr-xml-daily.ru/" target="_blank">API курсов ЦБ РФ</a>
+            Данные о курсе предоставлены: <a href="https://www.cbr-xml-daily.ru/" target="_blank">API курсов ЦБ РФ</a><br>
+            Данные о погоде предоставлены: <a href="https://openweathermap.org/" target="_blank">OpenWeatherMap</a>
         </div>
     </main>
     
     <footer>
-        <p>&copy; 2025 Кучерова</p>
+        <p>&copy; 2023 Ваш сайт</p>
     </footer>
 
     <script>
+        // Ваш API ключ от OpenWeatherMap (замените на свой)
+        const WEATHER_API_KEY = 'ваш_api_ключ';
+        // Город для прогноза погоды
+        const CITY = 'Moscow';
+        
         function getEuroExchangeRate() {
             const resultContainer = document.getElementById('exchangeRateResult');
             resultContainer.innerHTML = '<p>Загрузка данных...</p>';
@@ -110,7 +128,6 @@
                         month: 'long',
                         year: 'numeric'
                     });
-                    
                     resultContainer.innerHTML = `
                         <div class="exchange-rate-card">
                             <div class="rate-date">Курс на ${formattedDate}</div>
@@ -120,7 +137,8 @@
                                 <div>Предыдущий курс (${formattedPreviousDate}): ${previousRate} RUB</div>
                                 <div>Изменение: 
                                     <span class="${isUp ? 'up' : 'down'}">
-                                        ${isUp ? '+' : ''}${difference} RUB(${isUp ? '↑ рост' : '↓ снижение'})
+                                        ${isUp ? '+' : ''}${difference} RUB
+                                        (${isUp ? '↑ рост' : '↓ снижение'})
                                     </span>
                                 </div>
                             </div>
@@ -132,6 +150,96 @@
                     resultContainer.innerHTML = `
                         <div class="exchange-rate-card" style="color: #e74c3c;">
                             Не удалось получить курс. Пожалуйста, попробуйте позже.
+                        </div>
+                    `;
+                });
+        }
+        
+        function getWeather() {
+            const weatherContainer = document.getElementById('weatherResult');
+            weatherContainer.innerHTML = '<p>Загрузка данных о погоде...</p>';
+            
+            fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${CITY}&appid=${WEATHER_API_KEY}&units=metric&lang=ru`)
+                .then(response => response.json())
+                .then(data => {
+                    const today = new Date();
+                    const todayStr = today.toISOString().split('T')[0];
+                    
+                    // Фильтруем прогноз на сегодня
+                    const todayForecasts = data.list.filter(item => {
+                        return item.dt_txt.includes(todayStr);
+                    });
+                    
+                    // Находим температуру в указанные часы
+                    const temps = {
+                        '08:00': null,
+                        '12:00': null,
+                        '20:00': null
+                    };
+                    
+                    todayForecasts.forEach(forecast => {
+                        const time = forecast.dt_txt.split(' ')[1].substring(0, 5);
+                        if (time === '08:00') temps['08:00'] = Math.round(forecast.main.temp);
+                        if (time === '12:00') temps['12:00'] = Math.round(forecast.main.temp);
+                        if (time === '20:00') temps['20:00'] = Math.round(forecast.main.temp);
+                    });
+                    
+                    // Если каких-то данных нет, берем ближайшие доступные
+                    if (temps['08:00'] === null) {
+                        const morningForecast = todayForecasts.find(f => {
+                            const h = parseInt(f.dt_txt.split(' ')[1].substring(0, 2));
+                            return h >= 6 && h < 10;
+                        });
+                        if (morningForecast) temps['08:00'] = Math.round(morningForecast.main.temp);
+                    }
+                    
+                    if (temps['12:00'] === null) {
+                        const dayForecast = todayForecasts.find(f => {
+                            const h = parseInt(f.dt_txt.split(' ')[1].substring(0, 2));
+                            return h >= 11 && h < 14;
+                        });
+                        if (dayForecast) temps['12:00'] = Math.round(dayForecast.main.temp);
+                    }
+                    
+                    if (temps['20:00'] === null) {
+                        const eveningForecast = todayForecasts.find(f => {
+                            const h = parseInt(f.dt_txt.split(' ')[1].substring(0, 2));
+                            return h >= 19 && h < 22;
+                            });
+                        if (eveningForecast) temps['20:00'] = Math.round(eveningForecast.main.temp);
+                    }
+                    
+                    const formattedDate = today.toLocaleDateString('ru-RU', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                    
+                    weatherContainer.innerHTML = `
+                        <div class="weather-card">
+                            <div class="weather-date">Прогноз погоды на ${formattedDate} в ${data.city.name}</div>
+                            <div class="weather-times">
+                                <div class="weather-time">
+                                    <span>Утро (8:00):</span>
+                                    <span class="weather-value">${temps['08:00'] !== null ? temps['08:00'] + '°C' : 'нет данных'}</span>
+                                </div>
+                                <div class="weather-time">
+                                    <span>День (12:00):</span>
+                                    <span class="weather-value">${temps['12:00'] !== null ? temps['12:00'] + '°C' : 'нет данных'}</span>
+                                </div>
+                                <div class="weather-time">
+                                    <span>Вечер (20:00):</span>
+                                    <span class="weather-value">${temps['20:00'] !== null ? temps['20:00'] + '°C' : 'нет данных'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Ошибка при получении погоды:', error);
+                    weatherContainer.innerHTML = `
+                        <div class="weather-card" style="color: #e74c3c;">
+                            Не удалось получить данные о погоде. Пожалуйста, попробуйте позже.
                         </div>
                     `;
                 });
