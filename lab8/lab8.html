@@ -24,6 +24,15 @@
             text-align: center;
             color: #666;
         }
+        .flower-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .flower-actions {
+            display: flex;
+            gap: 5px;
+        }
     </style>
 </head>
 <body>
@@ -80,13 +89,25 @@
             </div>
 
             <div class="mt-4">
-                <h4>Цветы</h4>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">Цветы</h4>
+                    <button @click="addFlower" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle"></i> Добавить цветок
+                    </button>
+                </div>
                 <ul class="list-group">
-                    <li v-for="(flower, index) in flowers" :key="index" class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ flower || '...' }}
-                        <button @click="edit(index, flower)" class="btn btn-sm btn-outline-secondary">
-                            <i class="bi bi-pencil"></i> Изменить
-                        </button>
+                    <li v-for="(flower, index) in flowers" :key="index" class="list-group-item">
+                        <div class="flower-item">
+                            <span>{{ flower || '...' }}</span>
+                            <div class="flower-actions">
+                                <button @click="edit(index, flower)" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button @click="removeFlower(index)" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -96,6 +117,7 @@
             <p>&copy; 2025 Кучерова София</p>
         </footer>
     </div>
+
     <script>
         Vue.createApp({
             data() {
@@ -129,6 +151,15 @@
                         setTimeout(() => {
                             this.flowers[id] = newName;
                         }, 1000);
+                    }
+                },
+                removeFlower(index) {
+                    this.flowers.splice(index, 1);
+                },
+                addFlower() {
+                    const newFlower = prompt('Введите название нового цветка:');
+                    if (newFlower) {
+                        this.flowers.push(newFlower);
                     }
                 },
                 calculate() {
